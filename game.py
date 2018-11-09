@@ -27,14 +27,15 @@ def randomword():
     #introduction
 def hangman(word):
     print('DEBUG ANSWER: ' + word) #debug answer
-    print('Your word is ' + len(word)*' _ ' + ' spaces long.\n' + 'Begin Guessing!\n')
+    print('Your word is ' + len(word)*' _ ' + ' spaces long.\n' + 'You have 10 attempts\n' + 'Begin Guessing!\n')
     guess = '1'
     answer = word
     guessed = []
+    attempts = 10 
     
-#     listed = len(word)*'{} ' G1
-#     unlisted = '_',
-    
+#     listed = len(word)*'{} ' 
+#     unlisted = '_'
+     
     #main game loop
     while word != guess or '':
         guess = input('Guess a letter: ')
@@ -42,14 +43,19 @@ def hangman(word):
         os.system('cls')
         print(len(word)*' _ ') #placeholderWIP
 
-#         print(listed) G1
-
+#         print(listed.format(unlisted, unlisted, unlisted, unlisted)) 
+        
         if guess in answer:
             word.replace(guess, "")
         elif guess not in answer and guess not in guessed:
             guessed.append(guess)
         print('Guessed Letters ' + str(guessed))
-        
+
+        if guess not in word:
+            attempts -= 1
+            if attempts == 0:
+                print('GAME OVER')
+                break   
+        print('Attempts left: '+str(attempts))
+
 hangman(randomword())
-
-
