@@ -1,13 +1,17 @@
 '''
-Programmer: Ki Durrer
+Programmer: Ki Durrer, Miles Boswell
 
-TODO
+TODO:
 
-1.Setup Basics, Introduction
+[X] Setup Basics, Introduction
 
-2.Setup random word generator that appends to lists
+[X] Program loop system to show if you guessed right letter
 
-3. Program loop system to show if you guessed right letter
+[ ] Use larger list of words to choose from
+
+[ ] Display image of hangman
+
+[ ] Show letter guesses in color
 
 '''
 import random
@@ -19,50 +23,59 @@ input('Press ENTER To Play')
 
 def randomword():
     #test word list
-    global rword
-    randomwordlist = ['car','shop','man','blue','blueberry'] # Current test list of words, can add more later
+    randomwordlist = ['car','shop','man','blue','blueberry']
     rword = random.choice(randomwordlist)
     return rword
 
-    #introduction
+def place_letters(wordmat, word, letter):
+    locations = [i for i, _ in enumerate(word) if word.startswith(letter, i)]
+
+    for loc in locations:
+        wordmat = wordmat[:loc] + letter + wordmat[loc+1:]
+    return wordmat
+
+
 def hangman(word):
     print('DEBUG ANSWER: ' + word) #debug answer
-    print('Your word is ' + len(word)*' _ ' + ' spaces long.\n' + 'You have 10 attempts\n' + 'Begin Guessing!\n')
-    guess = '1'
-    answer = word
+
     guessed = []
-    log = []
-    attempts = 10 
+    attempts = 7 
+
+    wordmat = '_' * len(word)
+    blanks = ' '.join(wordmat)
     
     #main game loop
     while attempts > 0:
-        guess = input('Guess a letter: ')
-        wordmat = ''
-        log.append(guess)  
-        print('\n'*100) #for the time being this works for clearing screen
-        os.system('cls')
+        print('=====================================')
+        print('Guessed letters: {}\nAttempts left: {}' \
+            .format(','.join(guessed), attempts))
+        print(blanks)
 
-        for letters in word:
-            if letters in log:
-                wordmat = wordmat + letters
-            else:
-                wordmat = wordmat + " _ "
-                
-        print(wordmat)
+        guess = input('Guess a letter: ')
         
-        if wordmat == word:
-            break
-        
-        if guess not in answer and guess not in guessed:
-            guessed.append(guess)
-        print('Guessed Letters ' + str(guessed))
+        if guess in guessed:
+            print('You already guessed {}. Guess again!'.format(guess))
+            continue
 
         if guess not in word:
+            print('{} is not in my word.'.format(guess))
+            guessed.append(guess)
             attempts -= 1
-        print('Attempts left: '+str(attempts))
-        
-    if attempts:
-        print('You guessed ' + word)
+            continue
+
+        # guess is in word and hasn't been guessed already
+        guessed.append(guess)
+        wordmat = place_letters(wordmat, word, guess)
+        blanks = ' '.join(wordmat)
+
+        if wordmat == word:
+            print('Congratulations! You guessed {}!'.format(word))
+            break
+
     else:
-        print('Game over, you did not guess ' + word)
+        print('Game over, you ran out of guesses. My word was {}'.format(word))
+
+
+print()
+print('Begin Guessing!')
 hangman(randomword())
