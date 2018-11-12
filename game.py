@@ -1,21 +1,101 @@
 '''
 Programmer: Ki Durrer, Miles Boswell
-
 TODO:
-
 [X] Setup Basics, Introduction
-
 [X] Program loop system to show if you guessed right letter
-
 [ ] Use larger list of words to choose from
-
 [ ] Display image of hangman
-
 [ ] Show letter guesses in color
-
 '''
 import random
 import os
+
+HANGMAN = (
+    """
+    -----
+    |   |
+    |   0
+    |
+    |
+    |
+    |
+    |
+    |
+    --------
+    """,
+    """
+    -----
+    |   |
+    |   0
+    |  -+-
+    |
+    |
+    |
+    |
+    |
+    --------
+    """,
+    """
+    -----
+    |   |
+    |   0
+    | /-+-
+    |
+    |
+    |
+    |
+    |
+    --------
+    """,
+    """
+    -----
+    |   |
+    |   0
+    | /-+-\ 
+    |
+    |
+    |
+    |
+    |
+    --------
+    """,
+    """
+    -----
+    |   |
+    |   0
+    | /-+-\ 
+    |   | 
+    |   | 
+    |
+    |
+    |
+    --------
+    """,
+    """
+    -----
+    |   |
+    |   0
+    | /-+-\ 
+    |   | 
+    |   | 
+    |  | 
+    |  | 
+    |
+    --------
+    """,
+
+    """
+    -----
+    |   |
+    |   0
+    | /-+-\ 
+    |   | 
+    |   | 
+    |  | | 
+    |  | | 
+    |
+    --------
+    """)
 
 print('Welcome to Hang-man!')
 input('Press ENTER To Play')
@@ -40,7 +120,8 @@ def hangman(word):
 
     guessed = []
     attempts = 7 
-
+    n = attempts
+    
     wordmat = '_' * len(word)
     blanks = ' '.join(wordmat)
     
@@ -61,6 +142,7 @@ def hangman(word):
             print('{} is not in my word.'.format(guess))
             guessed.append(guess)
             attempts -= 1
+            print(HANGMAN[n - 1 - attempts])            
             continue
 
         # guess is in word and hasn't been guessed already
